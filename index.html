@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BØLKE — Хлебопекарный цех | Алматы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.cdnfonts.com/css/Montserrat" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EDD6;
+    --cream-dark: #EFE0BC;
+    --gold: #C9A84C;
+    --gold-light: #E2C278;
+    --gold-dark: #A8862E;
+    --brown: #2C1A0E;
+    --brown-light: #4A2E1A;
+    --brown-mid: #6B3F1E;
+    --white: #FFFDF7;
+    --overlay: rgba(44,26,14,0.55);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--cream);
+    color: var(--brown);
+    overflow-x: hidden;
+  }
+
+  /* TEXTURE BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(245,237,214,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    transition: box-shadow 0.3s;
+  }
+  header.scrolled { box-shadow: 0 4px 30px rgba(44,26,14,0.15); }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    line-height: 1;
+  }
+  .logo-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--brown);
+    letter-spacing: 0.08em;
+  }
+  .logo-name span { color: var(--gold); }
+  .logo-est {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  nav { display: flex; gap: 2rem; align-items: center; }
+  nav a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--brown);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    position: relative;
+    transition: color 0.2s;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0; right: 0;
+    height: 1.5px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.25s;
+  }
+  nav a:hover { color: var(--gold-dark); }
+  nav a:hover::after { transform: scaleX(1); }
+
+  .btn {
+    display: inline-block;
+    padding: 0.65rem 1.4rem;
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.45);
+    background: var(--gold-dark);
+  }
+
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+  .burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--brown);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 72px; left: 0; right: 0;
+    background: var(--cream);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    padding: 1.5rem 2rem;
+    z-index: 999;
+    box-shadow: 0 8px 30px rgba(44,26,14,0.1);
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--brown);
+    text-decoration: none;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .mobile-menu .btn { text-align: center; margin-top: 0.5rem; }
+
+  /* ===== HERO ===== */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #hero video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .hero-fallback {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1600');
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    padding: 0 1.5rem;
+    max-width: 860px;
+  }
+
+  .hero-content h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  }
+
+  .hero-content h1 span { color: var(--gold-light); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    opacity: 0.92;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+  }
+
+  .hero-perks {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-perk {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    opacity: 0.93;
+    backdrop-filter: blur(4px);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    min-width: 160px;
+  }
+  .hero-perk .perk-icon { font-size: 1.8rem; }
+
+  .btn-hero {
+    padding: 0.9rem 2.4rem;
+    font-size: 1rem;
+    border-radius: 4px;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll::before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.4);
+    animation: line-grow 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 1rem;
+  }
+
+  .section-line {
+    width: 60px;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 7rem 0 6rem;
+    background: var(--white);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--brown-light);
+    margin-bottom: 2.5rem;
+  }
+
+  .about-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .about-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid rgba(201,168,76,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .about-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.15);
+  }
+  .about-card-icon { font-size: 2rem; flex-shrink: 0; }
+  .about-card-text h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .about-card-text p {
+    font-size: 0.85rem;
+    color: var(--brown-mid);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* PRODUCTS */
+  #products {
+    padding: 7rem 0 6rem;
+    background: var(--cream);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 3rem;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .tab-btn {
+    padding: 0.75rem 2rem;
+    background: transparent;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brown);
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+    letter-spacing: 0.03em;
+  }
+  .tab-btn.active {
+    background: var(--gold);
+    color: #fff;
+  }
+  .tab-btn:not(.active):hover { background: rgba(201,168,76,0.12); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.18);
+    transition: transform 0.25s, box-shadow 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 36px rgba(44,26,14,0.13);
+  }
+  .product-card.hidden { display: none; }
+
+  .product-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-body {
+    padding: 1rem 1.1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .product-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--brown);
+    line-height: 1.3;
+  }
+
+  .product-weight {
+    font-size: 0.78rem;
+    color: var(--brown-mid);
+    font-weight: 400;
+  }
+
+  .product-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold-dark);
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .product-order {
+    display: block;
+    margin: 0 1.1rem 1.1rem;
+    padding: 0.5rem;
+    text-align: center;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold-dark);
+    border-radius: 5px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .product-order:hover {
+    background: var(--gold);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .show-more-wrap {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold-dark);
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover {
+    background: var(--gold);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.35);
+  }
+
+  /* CERTIFICATES */
+  #certs {
+    padding: 7rem 0 6rem;
+    background: var(--white);
+  }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .cert-card {
+    text-align: center;
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(201,168,76,0.2);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .cert-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 36px rgba(201,168,76,0.2);
+  }
+  .cert-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+  .cert-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 0.6rem;
+  }
+  .cert-card p {
+    font-size: 0.875rem;
+    color: var(--brown-mid);
+    line-height: 1.6;
+  }
+
+  /* CUSTOM RECIPE BANNER */
+  #custom {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #C9A84C 0%, #A8862E 50%, #8B6E1A 100%);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #custom::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(255,255,255,0.08)'/%3E%3C/svg%3E");
+    background-size: 30px 30px;
+  }
+  #custom h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  #custom p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.88);
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+  .btn-white {
+    background: #fff;
+    color: var(--gold-dark);
+    font-weight: 700;
+    position: relative;
+  }
+  .btn-white:hover {
+    background: var(--cream);
+    color: var(--brown);
+  }
+
+  /* PAYMENT */
+  #payment {
+    padding: 6rem 0;
+    background: var(--cream);
+  }
+
+  .payment-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .payment-card {
+    text-align: center;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 2rem 1rem;
+    border: 1px solid rgba(201,168,76,0.18);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .payment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(44,26,14,0.1);
+  }
+  .payment-icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+  .payment-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--brown);
+    margin-bottom: 0.3rem;
+  }
+  .payment-card p {
+    font-size: 0.8rem;
+    color: var(--brown-mid);
+  }
+
+  /* FORM */
+  #form {
+    padding: 7rem 0 6rem;
+    background: var(--white);
+  }
+
+  .form-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .form-intro p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--brown-light);
+    margin-bottom: 2rem;
+  }
+
+  .form-contacts { display: flex; flex-direction: column; gap: 1rem; }
+  .form-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--brown);
+  }
+  .form-contact-item a { color: var(--brown); text-decoration: none; }
+  .form-contact-item a:hover { color: var(--gold-dark); }
+
+  form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--brown);
+    text-transform: uppercase;
+  }
+
+  input, select, textarea {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    color: var(--brown);
+    background: var(--cream);
+    border: 1.5px solid rgba(201,168,76,0.3);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  textarea { resize: vertical; min-height: 100px; }
+  select { appearance: none; cursor: pointer; }
+
+  .btn-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    letter-spacing: 0.02em;
+    margin-top: 0.5rem;
+  }
+  .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+    background: #1ebe5d;
+  }
+  .btn-whatsapp svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+
+  /* FOOTER */
+  footer {
+    background: var(--brown);
+    color: rgba(245,237,214,0.8);
+    padding: 4rem 0 2rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-logo-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.08em;
+  }
+  .footer-logo-name span { color: var(--gold); }
+  .footer-est {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 4px;
+    margin-bottom: 1rem;
+  }
+  .footer-desc { font-size: 0.875rem; line-height: 1.7; }
+
+  .footer-col h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.03em;
+  }
+
+  .footer-col p, .footer-col a {
+    font-size: 0.875rem;
+    color: rgba(245,237,214,0.7);
+    text-decoration: none;
+    line-height: 1.8;
+    display: block;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--gold-light); }
+
+  .footer-certs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .footer-cert-badge {
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-light);
+    padding: 0.25rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-wa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #25D366;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .footer-wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37,211,102,0.35);
+    color: #fff;
+  }
+  .footer-wa-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(245,237,214,0.1);
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-bottom p { font-size: 0.8rem; color: rgba(245,237,214,0.4); }
+
+  /* BACK TO TOP */
+  #back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 46px;
+    height: 46px;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.4);
+  }
+  #back-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #back-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.5);
+  }
+
+  /* ANIMATIONS */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.3s; }
+  .fade-in-delay-4 { transition-delay: 0.4s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .payment-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .certs-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .header-inner .btn { display: none; }
+    .burger { display: flex; }
+    .tabs { width: 100%; }
+    .tab-btn { flex: 1; padding: 0.75rem 0.5rem; font-size: 0.8rem; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .certs-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .hero-perks { gap: 0.75rem; }
+    .hero-perk { min-width: 120px; padding: 0.75rem; }
+    .payment-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .payment-grid { grid-template-columns: 1fr 1fr; }
+    .hero-perks { flex-direction: column; align-items: center; }
+    .hero-perk { width: 100%; max-width: 260px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <span class="logo-name">B<span>Ø</span>LKE</span>
+      <span class="logo-est">Est. 2022</span>
+    </a>
+    <nav>
+      <a href="#about">О нас</a>
+      <a href="#products">Продукция</a>
+      <a href="#certs">Сертификаты</a>
+      <a href="#form">Контакты</a>
+    </nav>
+    <a href="#form" class="btn">Оставить заявку</a>
+    <button class="burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about" class="menu-link">О нас</a>
+  <a href="#products" class="menu-link">Продукция</a>
+  <a href="#certs" class="menu-link">Сертификаты</a>
+  <a href="#form" class="menu-link">Контакты</a>
+  <a href="#form" class="btn menu-link">Оставить заявку</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-fallback"></div>
+  <video autoplay loop muted playsinline>
+    <source src="hero-video.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Свежий хлеб для <span>вашего бизнеса</span> 🥖</h1>
+    <p class="hero-sub">Хлеб для FAST FOOD &nbsp;·&nbsp; HORECA &nbsp;·&nbsp; Магазины</p>
+    <div class="hero-perks">
+      <div class="hero-perk">
+        <span class="perk-icon">🥖</span>
+        <span>Каждый день<br>15 000+ изделий</span>
+      </div>
+      <div class="hero-perk">
+        <span class="perk-icon">🚚</span>
+        <span>Бесплатная<br>доставка</span>
+      </div>
+      <div class="hero-perk">
+        <span class="perk-icon">📍</span>
+        <span>Масанчи 23/12<br>Алматы</span>
+      </div>
+    </div>
+    <a href="#form" class="btn btn-hero">Получить прайс</a>
+  </div>
+  <div class="hero-scroll">Прокрутите вниз</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <div class="section-title">О нас</div>
+        <div class="section-line"></div>
+        <p>BØLKE — хлебопекарный цех, основанный в 2022 году в Алматы. Мы производим более 15 000 свежих хлебобулочных изделий каждый день для фастфудов, ресторанов и магазинов. Сертифицированы по ISO&nbsp;22000, Халал и ЕАС.</p>
+        <p>Мы используем только качественное сырьё, современное оборудование и контролируемые технологические процессы — чтобы каждая булочка была стабильно вкусной и безопасной для ваших гостей.</p>
+        <a href="#form" class="btn">Стать партнёром</a>
+      </div>
+      <div class="about-cards fade-in fade-in-delay-2">
+        <div class="about-card">
+          <div class="about-card-icon">🏭</div>
+          <div class="about-card-text">
+            <h4>Собственное производство</h4>
+            <p>Полный контроль качества на каждом этапе — от замеса теста до упаковки готовой продукции.</p>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">✅</div>
+          <div class="about-card-text">
+            <h4>Сертификаты качества</h4>
+            <p>ISO 22000, Халал, ЕАС — международные стандарты безопасности и качества пищевых продуктов.</p>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">🤝</div>
+          <div class="about-card-text">
+            <h4>Индивидуальный подход</h4>
+            <p>Разработаем рецептуру под ваш бренд, упаковку и объёмы поставок под ваши потребности.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="container">
+    <div class="section-title fade-in">Наша продукция</div>
+    <div class="section-line fade-in"></div>
+    <div class="tabs fade-in">
+      <button class="tab-btn active" data-tab="horeca">Для фастфудов и HoReCa</button>
+      <button class="tab-btn" data-tab="shop">Для магазинов</button>
+    </div>
+
+    <!-- HORECA TAB -->
+    <div class="tab-content active" id="tab-horeca">
+      <div class="products-grid" id="grid-horeca">
+        <!-- Cards injected by JS -->
+      </div>
+      <div class="show-more-wrap" id="more-horeca" style="display:none;">
+        <button class="btn-outline" onclick="showAll('horeca')">Показать все</button>
+      </div>
+    </div>
+
+    <!-- SHOP TAB -->
+    <div class="tab-content" id="tab-shop">
+      <div class="products-grid" id="grid-shop">
+      </div>
+      <div class="show-more-wrap" id="more-shop" style="display:none;">
+        <button class="btn-outline" onclick="showAll('shop')">Показать все</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certs">
+  <div class="container">
+    <div class="section-title fade-in">Наши сертификаты</div>
+    <div class="section-line fade-in"></div>
+    <div class="certs-grid">
+      <div class="cert-card fade-in fade-in-delay-1">
+        <span class="cert-icon">🏅</span>
+        <h3>ISO 22000</h3>
+        <p>Международный стандарт безопасности пищевых продуктов. Гарантия стабильного качества и безопасности на всех этапах производства.</p>
+      </div>
+      <div class="cert-card fade-in fade-in-delay-2">
+        <span class="cert-icon">☪️</span>
+        <h3>Халал</h3>
+        <p>Сертификат соответствия нормам Халал. Вся продукция соответствует требованиям исламских стандартов питания.</p>
+      </div>
+      <div class="cert-card fade-in fade-in-delay-3">
+        <span class="cert-icon">✅</span>
+        <h3>ЕАС</h3>
+        <p>Евразийский знак соответствия. Подтверждает соответствие продукции техническим регламентам Евразийского экономического союза.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUSTOM RECIPE -->
+<section id="custom">
+  <div class="container">
+    <h2 class="fade-in">Разработаем рецепт под ваш запрос</h2>
+    <p class="fade-in fade-in-delay-1">Создадим уникальный хлеб специально для вашего бренда или меню</p>
+    <a href="#form" class="btn btn-white fade-in fade-in-delay-2">Обсудить</a>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section id="payment">
+  <div class="container">
+    <div class="section-title fade-in">Способы оплаты</div>
+    <div class="section-line fade-in"></div>
+    <div class="payment-grid">
+      <div class="payment-card fade-in fade-in-delay-1">
+        <span class="payment-icon">💵</span>
+        <h4>Наличные</h4>
+        <p>Оплата при получении заказа</p>
+      </div>
+      <div class="payment-card fade-in fade-in-delay-2">
+        <span class="payment-icon">📱</span>
+        <h4>Kaspi</h4>
+        <p>Перевод через Kaspi.kz</p>
+      </div>
+      <div class="payment-card fade-in fade-in-delay-3">
+        <span class="payment-icon">🏦</span>
+        <h4>Перевод</h4>
+        <p>Банковский перевод по реквизитам</p>
+      </div>
+      <div class="payment-card fade-in fade-in-delay-4">
+        <span class="payment-icon">📋</span>
+        <h4>Безналичный расчёт</h4>
+        <p>Счёт-фактура для юридических лиц</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section id="form">
+  <div class="container">
+    <div class="form-wrap">
+      <div class="form-intro fade-in">
+        <div class="section-title">Оставьте заявку</div>
+        <div class="section-line"></div>
+        <p>Свяжитесь с нами и мы подберём оптимальный ассортимент и условия сотрудничества для вашего бизнеса.</p>
+        <p>Работаем с фастфудами, ресторанами, кафе, магазинами и розничными точками.</p>
+        <div class="form-contacts">
+          <div class="form-contact-item">
+            <span>📍</span>
+            <span>Масанчи 23/12, Алматы</span>
+          </div>
+          <div class="form-contact-item">
+            <span>📞</span>
+            <a href="tel:+77770022700">8 (777) 002-27-00</a>
+          </div>
+          <div class="form-contact-item">
+            <span>💬</span>
+            <a href="https://wa.me/77770022700" target="_blank">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <form id="order-form" class="fade-in fade-in-delay-2">
+        <div class="form-group">
+          <label for="name">Ваше имя *</label>
+          <input type="text" id="name" name="name" placeholder="Например: Айгерим" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Телефон *</label>
+          <input type="tel" id="phone" name="phone" placeholder="+7 (___) ___-__-__" required>
+        </div>
+        <div class="form-group">
+          <label for="business">Тип бизнеса</label>
+          <select id="business" name="business">
+            <option value="">Выберите тип бизнеса...</option>
+            <option value="Фастфуд">Фастфуд</option>
+            <option value="Ресторан">Ресторан</option>
+            <option value="Магазин">Магазин</option>
+            <option value="Другое">Другое</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="product">Интересующий продукт</label>
+          <input type="text" id="product" name="product" placeholder="Например: булочки для бургеров">
+        </div>
+        <div class="form-group">
+          <label for="comment">Комментарий</label>
+          <textarea id="comment" name="comment" placeholder="Объём поставки, периодичность, дополнительные пожелания..."></textarea>
+        </div>
+        <button type="button" class="btn-whatsapp" onclick="sendToWhatsApp()">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Отправить в WhatsApp
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-name">B<span>Ø</span>LKE</div>
+        <div class="footer-est">Est. 2022</div>
+        <p class="footer-desc">Хлебопекарный цех в Алматы. Производим свежий хлеб каждый день для вашего бизнеса.</p>
+        <a href="https://wa.me/77770022700" target="_blank" class="footer-wa-btn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          WhatsApp
+        </a>
+      </div>
+      <div class="footer-col">
+        <h4>Контакты</h4>
+        <p>📍 Масанчи 23/12, Алматы</p>
+        <a href="tel:+77770022700">📞 8 (777) 002-27-00</a>
+        <a href="#about">О компании</a>
+        <a href="#products">Продукция</a>
+        <a href="#certs">Сертификаты</a>
+        <a href="#form">Оставить заявку</a>
+      </div>
+      <div class="footer-col">
+        <h4>Сертификаты</h4>
+        <div class="footer-certs">
+          <span class="footer-cert-badge">ISO 22000</span>
+          <span class="footer-cert-badge">Халал</span>
+          <span class="footer-cert-badge">ЕАС</span>
+        </div>
+        <p style="margin-top:1rem; font-size:0.82rem; line-height:1.7;">Работаем с фастфудами, ресторанами, кафе и магазинами по всему Алматы.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 BØLKE. Все права защищены.</p>
+      <p>Хлебопекарный цех · Алматы · Казахстан</p>
+    </div>
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button id="back-top" aria-label="Наверх" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== PRODUCT DATA =====
+const horecaProducts = [
+  { name: "Классический багет", weight: "300–320 г", price: "₸350", img: "https://images.unsplash.com/photo-1540914124281-342587941389?w=400&q=80" },
+  { name: "Ржаной багет", weight: "300–320 г", price: "₸400", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
+  { name: "Саксаул багет", weight: "150–170 г", price: "₸400", img: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&q=80" },
+  { name: "Французский багет", weight: "300–320 г", price: "₸500", img: "https://images.unsplash.com/photo-1566566500782-2bf56bb6e4e4?w=400&q=80" },
+  { name: "Панини пшеничный", weight: "90–100 г", price: "₸150", img: "https://images.unsplash.com/photo-1528736235302-52922df5c122?w=400&q=80" },
+  { name: "Панини ржаной", weight: "90–100 г", price: "₸150", img: "https://images.unsplash.com/photo-1509365390695-33aee754301f?w=400&q=80" },
+  { name: "Чиабатта", weight: "200 г", price: "₸350", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&q=80" },
+  { name: "Чиабатта", weight: "500 г", price: "₸650", img: "https://images.unsplash.com/photo-1548369937-47519962c11a?w=400&q=80" },
+  { name: "Гриссини", weight: "180–200 г", price: "₸550", img: "https://images.unsplash.com/photo-1620921592649-8e5bd8dda7d1?w=400&q=80" },
+  { name: "Хот-дог бриош", weight: "55–60 г", price: "₸150", img: "https://images.unsplash.com/photo-1612392166886-ee8475b03af2?w=400&q=80" },
+  { name: "Булочки для хот-догов", weight: "65–70 г", price: "₸110", img: "https://images.unsplash.com/photo-1598511726623-d2e9996892f0?w=400&q=80" },
+  { name: "Булочка для сэндвича (с кунжутом)", weight: "100–110 г", price: "₸110", img: "https://images.unsplash.com/photo-1584735175315-9d5df23be4be?w=400&q=80" },
+  { name: "Булочка для сэндвича (Багет)", weight: "90 г", price: "₸110", img: "https://images.unsplash.com/photo-1600636618749-fed7735e3d2a?w=400&q=80" },
+  { name: "Цельнозерновой сэндвич", weight: "120 г", price: "₸150", img: "https://images.unsplash.com/photo-1574085733277-851d9d856a3a?w=400&q=80" },
+  { name: "Булочки гамбургер глянец 10 см", weight: "70 г", price: "₸110", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" },
+  { name: "Булочки гамбургер глянец 12 см", weight: "100 г", price: "₸120", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400&q=80" },
+  { name: "Булочки гамбургер кунжут 10 см", weight: "65–70 г", price: "₸110", img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&q=80" },
+  { name: "Булочки гамбургер кунжут 12 см", weight: "100–110 г", price: "₸130", img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&q=80" },
+  { name: "Булочки гамбургер с зерном 10 см", weight: "70 г", price: "₸110", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&q=80" },
+  { name: "Булочки гамбургер с зерном 12 см", weight: "100 г", price: "₸130", img: "https://images.unsplash.com/photo-1572441710948-3c16f8ee9efb?w=400&q=80" },
+  { name: "Базлама", weight: "—", price: "₸200", img: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80" },
+  { name: "Круассан сырный", weight: "—", price: "₸400", img: "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=400&q=80" },
+  { name: "Круассан классик", weight: "—", price: "₸350", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&q=80" },
+  { name: "Круассан замороженный", weight: "—", price: "₸300", img: "https://images.unsplash.com/photo-1530610476181-d83430b64dcd?w=400&q=80" },
+  { name: "Мини булочки обойные", weight: "23–30 г", price: "₸80", img: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&q=80" },
+  { name: "Мини булочки ржаные", weight: "23–30 г", price: "₸80", img: "https://images.unsplash.com/photo-1585478259715-876acc5be8eb?w=400&q=80" },
+  { name: "Бейгл", weight: "120 г", price: "₸150", img: "https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&q=80" },
+];
+
+const shopProducts = [
+  { name: "Тостерный хлеб", weight: "750 г", price: "₸1 500", img: "https://images.unsplash.com/photo-1598373182133-52452f7691ef?w=400&q=80" },
+  { name: "Мини формовой хлеб (кунжут, зире, тукум)", weight: "25 г", price: "₸100", img: "https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=400&q=80" },
+  { name: "Бородинский хлеб", weight: "520–550 г", price: "₸350", img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80" },
+  { name: "Тартин зерновой на закваске", weight: "650 г", price: "₸650", img: "https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&q=80" },
+  { name: "Тартин зерновой на закваске", weight: "400 г", price: "₸400", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" },
+];
+
+function createCard(product, index, tabId) {
+  const isHidden = index >= 8;
+  const card = document.createElement('div');
+  card.className = 'product-card' + (isHidden ? ' hidden' : '');
+  card.innerHTML = `
+    <img class="product-img" src="${product.img}" alt="${product.name}" loading="lazy">
+    <div class="product-body">
+      <div class="product-name">${product.name}</div>
+      <div class="product-weight">${product.weight}</div>
+      <div class="product-price">${product.price}</div>
+    </div>
+    <a href="#form" class="product-order" onclick="setProduct('${product.name}')">Заказать</a>
+  `;
+  return card;
+}
+
+function setProduct(name) {
+  const productField = document.getElementById('product');
+  if (productField) productField.value = name;
+}
+
+function renderProducts(data, gridId, moreId) {
+  const grid = document.getElementById(gridId);
+  const more = document.getElementById(moreId);
+  grid.innerHTML = '';
+  data.forEach((p, i) => grid.appendChild(createCard(p, i, gridId)));
+  if (data.length > 8) more.style.display = 'block';
+}
+
+function showAll(tab) {
+  const grid = document.getElementById('grid-' + tab);
+  const btn = document.getElementById('more-' + tab);
+  grid.querySelectorAll('.product-card.hidden').forEach(c => c.classList.remove('hidden'));
+  btn.style.display = 'none';
+}
+
+renderProducts(horecaProducts, 'grid-horeca', 'more-horeca');
+renderProducts(shopProducts, 'grid-shop', 'more-shop');
+
+// ===== TABS =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== WHATSAPP =====
+function sendToWhatsApp() {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  if (!name || !phone) { alert('Пожалуйста, заполните обязательные поля: Имя и Телефон.'); return; }
+  const business = document.getElementById('business').value || 'Не указан';
+  const product = document.getElementById('product').value.trim() || 'Не указан';
+  const comment = document.getElementById('comment').value.trim() || 'Нет';
+  const msg = `Здравствуйте! Хочу сделать заказ в BOLKE.\n\nИмя: ${name}\nТелефон: ${phone}\nТип бизнеса: ${business}\nИнтересующий продукт: ${product}\nКомментарий: ${comment}`;
+  window.open('https://wa.me/77770022700?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// ===== HEADER SCROLL =====
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
+});
+
+// ===== BURGER MENU =====
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+document.querySelectorAll('.menu-link').forEach(link => {
+  link.addEventListener('click', () => {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+// ===== INTERSECTION OBSERVER =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
